@@ -37,5 +37,7 @@ defmodule Day1 do
       },
       Application.get_env(:advent, :benchee)
     )
+
+    :ok
   end
 end

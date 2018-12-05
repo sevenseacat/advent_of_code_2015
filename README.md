@@ -10,6 +10,10 @@ If you're curious how long each of my solutions roughly takes to run.
 
 ```
 Name                    ips        average  deviation         median         99th %
-day 1, part 1        2.86 K      349.11 μs   ±307.92%         230 μs     2646.04 μs
-day 1, part 2        4.25 K      235.20 μs   ±259.13%         162 μs     1651.54 μs
+day 1, part 1        4.00 K      250.19 μs   ±122.62%         217 μs      571.98 μs
+day 1, part 2        7.95 K      125.83 μs   ±120.90%         108 μs         279 μs
+
+Name                    ips        average  deviation         median         99th %
+day 2, part 1        822.11        1.22 ms    ±14.73%        1.18 ms        1.58 ms
+day 2, part 2        565.34        1.77 ms    ±14.01%        1.72 ms        2.15 ms
 ```
