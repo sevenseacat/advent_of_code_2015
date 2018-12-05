@@ -8,29 +8,19 @@ defmodule Day4 do
   iex> Day4.part1("pqrstuv")
   1048970
   """
-  def part1(input), do: do_parts(input, 0, &five_zeroes?/1)
-  def part2(input), do: do_parts(input, 282_749, &six_zeroes?/1)
+  def part1(input), do: do_parts(input, 0, 20)
+  def part2(input), do: do_parts(input, 282_749, 24)
 
-  defp do_parts(input, counter, fun) do
-    # The biggest value we need to test against, fits inside three raw binary codepoints,
-    # of 8 bits each - so size 24. Slice that off and use that to check against.
-    # Reference: https://til.hashrocket.com/posts/7a5f3c7278-compute-md5-hash-of-a-string
-    <<val::24, _::binary>> = :erlang.md5("#{input}#{counter}")
+  defp do_parts(input, counter, size) do
+    # 5 hexadecimal 0s are 20 bits. 6 are 24.
+    case :erlang.md5(input <> Integer.to_string(counter)) do
+      <<0::size(size), _::bits>> ->
+        counter
 
-    if fun.(val) do
-      counter
-    else
-      do_parts(input, counter + 1, fun)
+      _ ->
+        do_parts(input, counter + 1, size)
     end
   end
-
-  # 000000 is 0 and 00000F is therefore 15 - anything between those is five zeroes.
-  defp five_zeroes?(val) when val <= 15, do: true
-  defp five_zeroes?(_), do: false
-
-  # And just 0 is six zeroes.
-  defp six_zeroes?(0), do: true
-  defp six_zeroes?(_), do: false
 
   def bench do
     Benchee.run(
