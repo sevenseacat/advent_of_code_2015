@@ -28,4 +28,14 @@ defmodule Day1 do
   def part2(_, floor, index) when floor < 0, do: index
   def part2(<<"(", rest::binary>>, floor, index), do: part2(rest, floor + 1, index + 1)
   def part2(<<")", rest::binary>>, floor, index), do: part2(rest, floor - 1, index + 1)
+
+  def bench do
+    Benchee.run(
+      %{
+        "day 1, part 1" => fn -> Advent.data(1) |> part1 end,
+        "day 1, part 2" => fn -> Advent.data(1) |> part2 end
+      },
+      Application.get_env(:advent, :benchee)
+    )
+  end
 end

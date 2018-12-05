@@ -1,21 +1,15 @@
-# Advent
+# Advent of Code 2015
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.org/sevenseacat/advent_of_code_2015.svg?branch=master)](https://travis-ci.org/sevenseacat/advent_of_code_2015)
 
-## Installation
+My Elixir solutions for the [Advent of Code 2015](http://adventofcode.com/2015).
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `advent` to your list of dependencies in `mix.exs`:
+## Benchmarks
 
-```elixir
-def deps do
-  [
-    {:advent, "~> 0.1.0"}
-  ]
-end
+If you're curious how long each of my solutions roughly takes to run.
+
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/advent](https://hexdocs.pm/advent).
-
+Name                    ips        average  deviation         median         99th %
+day 1, part 1        2.86 K      349.11 μs   ±307.92%         230 μs     2646.04 μs
+day 1, part 2        4.25 K      235.20 μs   ±259.13%         162 μs     1651.54 μs
+```
