@@ -15,6 +15,12 @@ defmodule Day7 do
     |> do_part1(%{})
   end
 
+  def part2(input) do
+    input
+    |> parse_input
+    |> do_part1(%{"b" => 46065})
+  end
+
   def do_part1(cmds, acc) do
     new_acc = Enum.reduce(cmds, acc, &run_cmd/2)
 
@@ -31,37 +37,37 @@ defmodule Day7 do
   def run_cmd({:assign, x, key}, map) do
     x = v(x, map)
 
-    if x == nil, do: map, else: Map.put(map, key, x)
+    if x == nil, do: map, else: Map.put_new(map, key, x)
   end
 
   def run_cmd({:and, [x, y], key}, map) do
     [x, y] = [v(x, map), v(y, map)]
 
-    if x == nil || y == nil, do: map, else: Map.put(map, key, Bitwise.band(x, y))
+    if x == nil || y == nil, do: map, else: Map.put_new(map, key, Bitwise.band(x, y))
   end
 
   def run_cmd({:or, [x, y], key}, map) do
     [x, y] = [v(x, map), v(y, map)]
 
-    if x == nil || y == nil, do: map, else: Map.put(map, key, Bitwise.bor(x, y))
+    if x == nil || y == nil, do: map, else: Map.put_new(map, key, Bitwise.bor(x, y))
   end
 
   def run_cmd({:lshift, [x, y], key}, map) do
     [x, y] = [v(x, map), v(y, map)]
 
-    if x == nil || y == nil, do: map, else: Map.put(map, key, Bitwise.bsl(x, y))
+    if x == nil || y == nil, do: map, else: Map.put_new(map, key, Bitwise.bsl(x, y))
   end
 
   def run_cmd({:rshift, [x, y], key}, map) do
     [x, y] = [v(x, map), v(y, map)]
 
-    if x == nil || y == nil, do: map, else: Map.put(map, key, Bitwise.bsr(x, y))
+    if x == nil || y == nil, do: map, else: Map.put_new(map, key, Bitwise.bsr(x, y))
   end
 
   def run_cmd({:not, x, key}, map) do
     x = v(x, map)
 
-    if x == nil, do: map, else: Map.put(map, key, 65535 - x)
+    if x == nil, do: map, else: Map.put_new(map, key, 65535 - x)
   end
 
   defp v(key, _) when is_integer(key), do: key
@@ -107,7 +113,8 @@ defmodule Day7 do
   def bench do
     Benchee.run(
       %{
-        "day 7, part 1" => fn -> Advent.data(7) |> Day7.part1() end
+        "day 7, part 1" => fn -> Advent.data(7) |> Day7.part1() end,
+        "day 7, part 2" => fn -> Advent.data(7) |> Day7.part2() end
       },
       Application.get_env(:advent, :benchee)
     )
