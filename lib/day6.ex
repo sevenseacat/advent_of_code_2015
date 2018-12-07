@@ -1,10 +1,6 @@
 defmodule Day6 do
   def part1(input) do
-    do_parts(input,
-      on: fn coord, lights -> Map.put(lights, coord, true) end,
-      off: fn coord, lights -> Map.put(lights, coord, false) end,
-      toggle: fn coord, lights -> Map.update(lights, coord, true, &(!&1)) end
-    )
+    do_parts(input, part1_cmds())
     |> Enum.count(fn {_, val} -> val end)
   end
 
@@ -18,6 +14,14 @@ defmodule Day6 do
     |> Enum.sum()
   end
 
+  def part1_cmds do
+    [
+      on: fn coord, lights -> Map.put(lights, coord, true) end,
+      off: fn coord, lights -> Map.put(lights, coord, false) end,
+      toggle: fn coord, lights -> Map.update(lights, coord, true, &(!&1)) end
+    ]
+  end
+
   defp do_parts(input, cmds) do
     input
     |> parse_input
@@ -25,7 +29,7 @@ defmodule Day6 do
   end
 
   @doc """
-  iex> Day6.run_commands([{:off, [{499,499}, {500,500}]}], %{{499, 499} => true})
+  iex> Day6.run_commands([{:off, [{499,499}, {500,500}]}], %{{499, 499} => true}, Day6.part1_cmds())
   %{{499,499} => false, {499,500} => false, {500,499} => false, {500,500} => false}
   """
   def run_commands([], lights, _), do: lights
@@ -46,10 +50,10 @@ defmodule Day6 do
 
   @doc """
   iex> Day6.parse_input("turn on 0,0 through 999,999")
-  {:on, [{0, 0}, {999, 999}]}
+  [on: [{0, 0}, {999, 999}]]
 
   iex> Day6.parse_input("toggle 0,0 through 999,0")
-  {:toggle, [{0, 0}, {999, 0}]}
+  [toggle: [{0, 0}, {999, 0}]]
   """
   def parse_input(input) do
     input
