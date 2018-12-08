@@ -8,6 +8,7 @@ defmodule AdventTest do
   doctest Day6
   doctest Day7
   doctest Day8
+  doctest Day9
 
   describe "day 8, part 1" do
     test "sample input" do
