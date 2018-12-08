@@ -9,10 +9,5 @@ defmodule AdventTest do
   doctest Day7
   doctest Day8
   doctest Day9
-
-  describe "day 8, part 1" do
-    test "sample input" do
-      assert Day8.part1("test/data/day8") == 12
-    end
-  end
+  doctest Day10
 end

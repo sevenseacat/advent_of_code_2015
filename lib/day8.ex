@@ -1,4 +1,8 @@
 defmodule Day8 do
+  @doc """
+  iex> Day8.part1("test/data/day8")
+  12
+  """
   def part1(filename) do
     filename
     |> parse_input
