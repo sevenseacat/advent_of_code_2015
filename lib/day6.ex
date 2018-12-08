@@ -22,18 +22,6 @@ defmodule Day6 do
     |> Enum.sum()
   end
 
-  def bounding_box(input) do
-    coords =
-      input
-      |> Enum.map(fn {_rule, [a, b]} -> [a, b] end)
-      |> List.flatten()
-
-    {{min_x, _}, {max_x, _}} = Enum.min_max_by(coords, fn {x, _} -> x end)
-    {{_, min_y}, {_, max_y}} = Enum.min_max_by(coords, fn {_, y} -> y end)
-
-    [{min_x, min_y}, {max_x, max_y}]
-  end
-
   def part1_cmds do
     [
       on: fn coord, lights ->
