@@ -9,70 +9,89 @@ defmodule Day11 do
   "ghjaabcc"
   """
   def part1(input \\ @input) do
-    if valid_password?(input) do
-      input
+    input
+    |> cook
+    |> do_part1
+    |> uncook
+  end
+
+  defp do_part1(chars) do
+    if valid_password?(chars) do
+      chars
     else
       # Increment and try again...
-      input
-      |> increment_string
-      |> part1
+      chars
+      |> increment_char
+      |> do_part1
     end
   end
 
-  @doc """
-  iex> Day11.increment_string("abcdefgh")
-  "abcdefgi"
+  def cook(string) do
+    string
+    |> String.reverse()
+    |> String.to_charlist()
+  end
 
-  iex> Day11.increment_string("abcdefgz")
-  "abcdefha"
-
-  iex> Day11.increment_string("abcdzzzz")
-  "abceaaaa"
-  """
-  def increment_string(input) do
-    chars =
-      input
-      |> String.reverse()
-      |> String.to_charlist()
-
+  def uncook(chars) do
     chars
-    |> gogogo
     |> IO.chardata_to_string()
     |> String.reverse()
   end
 
-  defp gogogo([?z | rest]), do: [?a | gogogo(rest)]
-  defp gogogo([notz | rest]), do: [notz + 1 | rest]
-
   @doc """
-  iex> Day11.valid_password?("hijklmmn")
-  false
+  iex> Day11.increment("abcdefgh")
+  "abcdefgi"
 
-  iex> Day11.valid_password?("abbceffg")
-  false
+  iex> Day11.increment("abcdefgz")
+  "abcdefha"
 
-  iex> Day11.valid_password?("abbcegjk")
-  false
-
-  iex> Day11.valid_password?("abcdffaa")
-  true
-
-  iex> Day11.valid_password?("ghjaabcc")
-  true
+  iex> Day11.increment("abcdzzzz")
+  "abceaaaa"
   """
-  def valid_password?(input) do
-    !forbidden_letters?(input) && double_letters?(input) &&
-      has_sequence?(String.to_charlist(input))
+  def increment(input) do
+    input
+    |> cook
+    |> increment_char
+    |> uncook
   end
 
-  defp double_letters?(input), do: String.match?(input, ~r/(\w)\1.*(\w)\2/)
-  defp forbidden_letters?(input), do: String.contains?(input, ["i", "o", "l"])
+  defp increment_char([?z | rest]), do: [?a | increment_char(rest)]
+  defp increment_char([notz | rest]), do: [notz + 1 | rest]
 
-  defp has_sequence?([x, y, z | rest]) do
+  @doc """
+  iex> "hijklmmn" |> Day11.cook |> Day11.valid_password?
+  false
+
+  iex> "abbceffg" |> Day11.cook |> Day11.valid_password?
+  false
+
+  iex> "abbcegjk" |> Day11.cook |> Day11.valid_password?
+  false
+
+  iex> "abcdffaa" |> Day11.cook |> Day11.valid_password?
+  true
+
+  iex> "ghjaabcc" |> Day11.cook |> Day11.valid_password?
+  true
+  """
+  def valid_password?(chars) do
+    !forbidden_letters?(chars) && double_letters?(chars, 0) && has_sequence?(chars)
+  end
+
+  defp double_letters?(_, 2), do: true
+  defp double_letters?([x, x | rest], count), do: double_letters?(rest, count + 1)
+  defp double_letters?([_, y | rest], count), do: double_letters?([y | rest], count)
+  defp double_letters?(_, _), do: false
+
+  defp forbidden_letters?(chars) do
+    Enum.any?(chars, fn char -> char == ?i || char == ?o || char == ?l end)
+  end
+
+  defp has_sequence?([z, y, x | rest]) do
     if y == x + 1 && z == y + 1 do
       true
     else
-      has_sequence?([y, z | rest])
+      has_sequence?([y, x | rest])
     end
   end
 
@@ -82,7 +101,11 @@ defmodule Day11 do
     Benchee.run(
       %{
         "day 11, part 1" => fn -> Day11.part1() end,
-        "day 11, part 2" => fn -> Day11.part1() |> Day11.increment_string() |> Day11.part1() end
+        "day 11, part 2" => fn ->
+          Day11.part1()
+          |> Day11.increment()
+          |> Day11.part1()
+        end
       },
       Application.get_env(:advent, :benchee)
     )
