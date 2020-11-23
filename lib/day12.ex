@@ -18,4 +18,53 @@ defmodule Day12 do
     |> Enum.map(&String.to_integer/1)
     |> Enum.sum()
   end
+
+  @doc """
+  iex> Day12.part2("[1,2,3]")
+  6
+
+  iex> Day12.part2("[1,{\\"c\\":\\"red\\",\\"b\\":2},3]")
+  4
+
+  iex> Day12.part2("{\\"d\\":\\"red\\",\\"e\\":[1,2,3,4],\\"f\\":5}")
+  0
+
+  iex> Day12.part2("[1,\\"red\\",5]")
+  6
+  """
+  def part2(input) do
+    input
+    |> Jason.decode!()
+    |> reject_reds
+    |> Jason.encode!()
+    |> part1
+  end
+
+  defp reject_reds(val) when is_map(val) do
+    if Enum.member?(Map.values(val), "red") do
+      0
+    else
+      val
+      |> Enum.map(fn {k, v} -> {k, reject_reds(v)} end)
+      |> Enum.into(%{})
+    end
+  end
+
+  defp reject_reds(val) when is_list(val) do
+    Enum.map(val, &reject_reds/1)
+  end
+
+  defp reject_reds(val), do: val
+
+  def bench do
+    Benchee.run(
+      %{
+        "day 12, part 1" => fn -> Advent.data(12) |> Day12.part1() end,
+        "day 12, part 2" => fn -> Advent.data(12) |> Day12.part2() end
+      },
+      Application.get_env(:advent, :benchee)
+    )
+
+    :ok
+  end
 end
