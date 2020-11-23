@@ -1,13 +1,15 @@
 defmodule Day13 do
   def part1(input) do
-    input
-    |> parse_input
-    |> sorted_best_table
+    input = parse_input(input)
+    sorted_best_table(input, list_people(input))
   end
 
-  def sorted_best_table(data) do
-    people = list_people(data)
+  def part2(input) do
+    input = parse_input(input)
+    sorted_best_table(input, ["you" | list_people(input)])
+  end
 
+  def sorted_best_table(data, people) do
     people
     |> Advent.permutations(length(people))
     |> Enum.map(fn order -> calculate_result(order, data) end)
@@ -49,9 +51,11 @@ defmodule Day13 do
   end
 
   defp get_score(person, next_to, data) do
-    data
-    |> Enum.find(fn {from, to, _score} -> from == person && to == next_to end)
-    |> elem(2)
+    case Enum.find(data, fn {from, to, _score} -> from == person && to == next_to end) do
+      # must be "you" and no-one cares about sitting next to you
+      nil -> 0
+      {_from, _to, score} -> score
+    end
   end
 
   def parse_input(input) do
