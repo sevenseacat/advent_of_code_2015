@@ -15,6 +15,25 @@ defmodule Day15 do
     |> Enum.max_by(fn {_, score} -> score end)
   end
 
+  @doc """
+  iex> Day15.part2("Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
+  ...> Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3")
+  {[{"Butterscotch", 40}, {"Cinnamon", 60}], 57600000}
+  """
+  def part2(input, teaspoons \\ @max_teaspoons) do
+    rules = parse_input(input)
+
+    rules
+    |> combinations(teaspoons)
+    |> Enum.map(fn quantities -> {quantities, score_for_cookie(quantities, rules)} end)
+    |> Enum.filter(fn {quantities, _score} -> calorie_count(quantities, rules) == 500 end)
+    |> Enum.max_by(fn {_, score} -> score end)
+  end
+
+  def calorie_count(quantities, rules) do
+    score_for_property(:calories, rules, quantities)
+  end
+
   def score_for_cookie(quantities, rules) do
     [:capacity, :durability, :flavor, :texture]
     |> Enum.map(fn property -> score_for_property(property, rules, quantities) end)
