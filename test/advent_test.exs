@@ -13,6 +13,7 @@ defmodule AdventTest do
   doctest Day11
   doctest Day12
   doctest Day14
+  doctest Day17
 
   describe "Day13" do
     test "can parse input" do
