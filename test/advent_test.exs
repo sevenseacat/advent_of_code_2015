@@ -30,4 +30,28 @@ Alice would lose 79 happiness units by sitting next to Carol."
       assert Day13.part1(input) == output
     end
   end
+
+  describe "Day15" do
+    test "score for cookie" do
+      expected = 62_842_880
+
+      result =
+        Day15.score_for_cookie(
+          [{"Butterscotch", 44}, {"Cinnamon", 56}],
+          [
+            %{
+              name: "Butterscotch",
+              capacity: -1,
+              durability: -2,
+              flavor: 6,
+              texture: 3,
+              calories: 8
+            },
+            %{name: "Cinnamon", capacity: 2, durability: 3, flavor: -2, texture: -1, calories: 3}
+          ]
+        )
+
+      assert expected == result
+    end
+  end
 end
