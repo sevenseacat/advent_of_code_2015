@@ -160,5 +160,21 @@ Alice would lose 79 happiness units by sitting next to Carol."
       assert parsed_input |> Day18.loop(3, c) |> Day18.format_output() == step3
       assert parsed_input |> Day18.loop(4, c) |> Day18.format_output() == step4
     end
+
+    test "running loops, part 2" do
+      parsed_input = Day18.parse_input("##.#.#\n...##.\n#....#\n..#...\n#.#..#\n####.#")
+      c = &Day18.stuck_lights/1
+      step1 = "#.##.#\n####.#\n...##.\n......\n#...#.\n#.####"
+      step2 = "#..#.#\n#....#\n.#.##.\n...##.\n.#..##\n##.###"
+      step3 = "#...##\n####.#\n..##.#\n......\n##....\n####.#"
+      step4 = "#.####\n#....#\n...#..\n.##...\n#.....\n#.#..#"
+      step5 = "##.###\n.##..#\n.##...\n.##...\n#.#...\n##...#"
+
+      assert parsed_input |> Day18.loop(1, c) |> Day18.format_output() == step1
+      assert parsed_input |> Day18.loop(2, c) |> Day18.format_output() == step2
+      assert parsed_input |> Day18.loop(3, c) |> Day18.format_output() == step3
+      assert parsed_input |> Day18.loop(4, c) |> Day18.format_output() == step4
+      assert parsed_input |> Day18.loop(5, c) |> Day18.format_output() == step5
+    end
   end
 end
